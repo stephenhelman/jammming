@@ -2,7 +2,7 @@ import Song from "./Song";
 
 const Playlist = () => {
   return (
-    <form>
+    <form className='playlist'>
       <input type='text' placeholder='Name your Playlist' />
       <ul>
         <Song />

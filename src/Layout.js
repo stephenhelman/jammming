@@ -1,10 +1,10 @@
 import Playlist from "./Playlist";
 import SearchResults from "./SearchResults";
 
-const Layout = () => {
+const Layout = ({ trackList, setTrackList }) => {
   return (
     <div className='layout'>
-      <SearchResults />
+      <SearchResults trackList={trackList} setTrackList={setTrackList} />
       <Playlist />
     </div>
   );

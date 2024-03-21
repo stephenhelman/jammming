@@ -1,5 +1,10 @@
-const Song = () => {
-  return <li>Song</li>;
+const Song = ({ track }) => {
+  return (
+    <li>
+      <p></p>
+      <button>+</button>
+    </li>
+  );
 };
 
 export default Song;
