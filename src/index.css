@@ -68,14 +68,32 @@ main {
   background-color: yellow;
 }
 
-.searchResults h2 {
-  text-align: center;
+.playlistBuilder {
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: flex-start;
+  align-items: center;
+  width: 300px;
+  background-color: green;
+}
+
+.playlist {
+  width: 100%;
+}
+
+.searchResults,
+.playlist {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .song {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  width: 100%;
   border-bottom: 1px solid #333;
   margin: 0.25rem 1rem;
 }
