@@ -1,35 +1,37 @@
 import { useState } from "react";
 import { v4 as uuid } from "uuid";
+import axios from "axios";
+import apiRequest from "./apiRequest";
 
 function App() {
-  const [songList, setSongList] = useState([
-    {
-      id: 1,
-      title: "Song 1",
-      artist: "Artist 1",
-    },
-    {
-      id: 2,
-      title: "Song 2",
-      artist: "Artist 2",
-    },
-    {
-      id: 3,
-      title: "Song 3",
-      artist: "Artist 3",
-    },
-    {
-      id: 4,
-      title: "Song 4",
-      artist: "Artist 4",
-    },
-    {
-      id: 5,
-      title: "Song 5",
-      artist: "Artist 5",
-    },
-  ]);
+  const [search, setSearch] = useState("");
+  const [songList, setSongList] = useState([]);
   const [playlistSongs, setPlaylistSongs] = useState([]);
+
+  const searchSongs = async () => {
+    try {
+      const response = await fetch("http://localhost:3500/songs");
+      if (!response.ok) throw Error("Did not receive expected data");
+      const songs = await response.json();
+      setSongList(songs);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const savePlaylist = async () => {
+    const postOptions = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(playlistSongs),
+    };
+    const result = await apiRequest(
+      "http://localhost:3500/playlist",
+      postOptions
+    );
+  };
 
   const handleAddPlaylist = (id) => {
     const songToAdd = songList.find((song) => song.id === id);
@@ -54,23 +56,37 @@ function App() {
         </h1>
       </header>
       <main>
-        <form onSubmit={(e) => e.preventDefault()} className='searchBar'>
-          <input type='text' placeholder='Search for a song' />
-          <button type='submit'>Search</button>
-        </form>
+        <div className='searchBar'>
+          <input
+            type='text'
+            placeholder='Search for a song'
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <button type='submit' onClick={searchSongs}>
+            Search
+          </button>
+        </div>
         <div className='layout'>
-          <ul className='searchResults'>
-            {songList.map((song) => (
-              <li className='song' key={song.id}>
-                <div>
-                  <p className='title'>{song.title}</p>
-                  <p className='artist'>{song.artist}</p>
-                </div>
-                <button onClick={() => handleAddPlaylist(song.id)}>+</button>
-              </li>
-            ))}
-          </ul>
-          <div className='playlistBuilder'>
+          <div className='searchResultsContainer'>
+            <h2>Results</h2>
+            <ul className='searchResults'>
+              {songList.length
+                ? songList.map((song) => (
+                    <li className='song' key={song.id}>
+                      <div>
+                        <p className='title'>{song.title}</p>
+                        <p className='artist'>{song.artist}</p>
+                      </div>
+                      <button onClick={() => handleAddPlaylist(song.id)}>
+                        +
+                      </button>
+                    </li>
+                  ))
+                : null}
+            </ul>
+          </div>
+          <div className='playlistContainer'>
             <input type='text' placeholder='Name your playlist' />
             {playlistSongs.length ? (
               <ul className='playlist'>
@@ -87,7 +103,9 @@ function App() {
                 ))}
               </ul>
             ) : null}
-            <button type='submit'>Save your playlist!</button>
+            <button type='submit' onClick={savePlaylist}>
+              Save your playlist!
+            </button>
           </div>
         </div>
       </main>

@@ -63,12 +63,22 @@ main {
   width: 100%;
 }
 
-.searchResults {
+.searchResultsContainer {
+  min-height: 400px;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: flex-start;
+  align-items: center;
   width: 400px;
   background-color: yellow;
 }
 
-.playlistBuilder {
+.searchResultsContainer h2 {
+  text-align: center;
+}
+
+.playlistContainer {
+  min-height: 400px;
   display: flex;
   flex-flow: column wrap;
   justify-content: flex-start;
@@ -77,6 +87,7 @@ main {
   background-color: green;
 }
 
+.searchResults,
 .playlist {
   width: 100%;
 }
