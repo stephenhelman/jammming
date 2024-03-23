@@ -5,6 +5,7 @@ import apiRequest from "./apiRequest";
 
 function App() {
   const [search, setSearch] = useState("");
+  const [playlistName, setPlaylistName] = useState("");
   const [songList, setSongList] = useState([]);
   const [playlistSongs, setPlaylistSongs] = useState([]);
 
@@ -19,18 +20,24 @@ function App() {
     }
   };
 
-  const savePlaylist = async () => {
+  const savePlaylist = async (playlistName) => {
+    const newPlaylist = {
+      "playlist-name": playlistName,
+      songs: playlistSongs,
+    };
     const postOptions = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(playlistSongs),
+      body: JSON.stringify(newPlaylist),
     };
     const result = await apiRequest(
       "http://localhost:3500/playlist",
       postOptions
     );
+    setPlaylistName("");
+    setPlaylistSongs([]);
   };
 
   const handleAddPlaylist = (id) => {
@@ -87,7 +94,12 @@ function App() {
             </ul>
           </div>
           <div className='playlistContainer'>
-            <input type='text' placeholder='Name your playlist' />
+            <input
+              type='text'
+              placeholder='Name your playlist'
+              value={playlistName}
+              onChange={(e) => setPlaylistName(e.target.value)}
+            />
             {playlistSongs.length ? (
               <ul className='playlist'>
                 {playlistSongs.map((song) => (
@@ -103,7 +115,7 @@ function App() {
                 ))}
               </ul>
             ) : null}
-            <button type='submit' onClick={savePlaylist}>
+            <button type='submit' onClick={() => savePlaylist(playlistName)}>
               Save your playlist!
             </button>
           </div>
